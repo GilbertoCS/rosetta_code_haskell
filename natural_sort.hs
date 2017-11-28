@@ -14,6 +14,8 @@ sortListWith l f = sort $ f l
  -- Ignoring leading spaces
 sampleFirstRule = ["ignore leading spaces: 2-2", " ignore leading spaces: 2-1", "  ignore leading spaces: 2+0",  "   ignore leading spaces: 2+1"]
 
+-- receive a String and remove all spaces from the start and end of that String, a String is considered an List os Char
+-- ex: "  a string " = "a string"
 ignoringStartEndSpaces :: [String] -> [String]
 ignoringStartEndSpaces = map strip
 

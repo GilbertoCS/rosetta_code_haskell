@@ -3,6 +3,7 @@
 import Data.List
 import Data.Char
 import Data.String.Utils
+import Data.Function (on)
 
 -- TODO gerar output com o valor original organizadoe nao somente o novo valor organizado
 
@@ -36,6 +37,13 @@ caseIndependent = map (map toLower)
 
 -- Numeric fields as numerics (deals with up to 20 digits) 
 sampleFifthRule = ["foo100bar99baz0.txt", "foo100bar10baz0.txt", "foo1000bar99baz10.txt", "foo1000bar99baz9.txt"]
+
+-- expected   ['foo100bar10baz0.txt',  'foo100bar99baz0.txt', 'foo1000bar99baz9.txt', 'foo1000bar99baz10.txt']
+
+
+-- let res =  groupBy ((==) `on` isNumber ) "string"
+-- map (filter isNumber) res
+-- usar join depois
 
 {--
 val r3 = Regex("""\s""")  // \s represents any whitespace characterval r5 = Regex("""\d+""")

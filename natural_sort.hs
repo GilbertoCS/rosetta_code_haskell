@@ -32,26 +32,28 @@ sampleThirdRule = ["Equiv. spaces: 3-3", "Equiv.\rspaces: 3-2", "Equiv.\x0cspace
 --Case independent sort
 sampleFourthRule = ["cASE INDEPENENT: 3-2", "caSE INDEPENENT: 3-1", "casE INDEPENENT: 3+0", "case INDEPENENT: 3+1"]
 
+-- lower case of an entire String
+-- ex "SomeCAse" = "somecase"
 caseIndependent :: [String] -> [String]
 caseIndependent = map (map toLower)
 
+-- join a list of numbers into a single number
+-- ex [4,2] = 42
+joiner :: [Int] -> Int
+joiner = read . concatMap show
+
 -- Numeric fields as numerics (deals with up to 20 digits) 
 sampleFifthRule = ["foo100bar99baz0.txt", "foo100bar10baz0.txt", "foo1000bar99baz10.txt", "foo1000bar99baz9.txt"]
-
 -- expected   ['foo100bar10baz0.txt',  'foo100bar99baz0.txt', 'foo1000bar99baz9.txt', 'foo1000bar99baz10.txt']
 
+numericFieldsAsNumbers :: [String] -> [[Int]]
+numericFieldsAsNumbers = map findOnlyNumerics
 
--- let res =  groupBy ((==) `on` isNumber ) "string"
--- map (filter isNumber) res
--- usar join depois
-
-{--
-val r3 = Regex("""\s""")  // \s represents any whitespace characterval r5 = Regex("""\d+""")
- 
- # Numeric sections as numerics
-    s = [ int("".join(g)) if isinteger else "".join(g)
-          for isinteger,g in groupby(s, lambda x: x in decdigits)]
- 
-/** Numeric fields as numerics (deals with up to 20 digits) */ 
-fun selector5(s: String) = r5.replace(s) { it.value.padStart(20, '0') }
---}
+findOnlyNumerics :: String -> [Int]
+findOnlyNumerics s = convertDigitAsStringToInt $ makeListOfDigitsAsString $ extractDigitsAsString s
+extractDigitsAsString :: String -> [String]
+extractDigitsAsString s = map (filter isNumber) $ groupBy ((==) `on` isNumber ) s
+makeListOfDigitsAsString :: [String] -> [String]
+makeListOfDigitsAsString l = tail $ nub l
+convertDigitAsStringToInt :: [String] -> [Int]
+convertDigitAsStringToInt = map (joiner . map  digitToInt)

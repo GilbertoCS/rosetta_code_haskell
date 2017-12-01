@@ -26,10 +26,10 @@ sampleSecondRule = ["ignore m.a.s spaces: 2-2", "ignore m.a.s  spaces: 2-1", "ig
 ignoringMultipleAdjacentSpaces :: [String] -> [String]
 ignoringMultipleAdjacentSpaces = map (unwords . words)
 
--- Equivalent whitespace characters
+-- 2. Equivalent whitespace characters
 sampleThirdRule = ["Equiv. spaces: 3-3", "Equiv.\rspaces: 3-2", "Equiv.\x0cspaces: 3-1", "Equiv.\x0bspaces: 3+0", "Equiv.\nspaces: 3+1", "Equiv.\tspaces: 3+2"]
 
---Case independent sort
+-- 3. Case independent sort
 sampleFourthRule = ["cASE INDEPENENT: 3-2", "caSE INDEPENENT: 3-1", "casE INDEPENENT: 3+0", "case INDEPENENT: 3+1"]
 
 -- lower case of an entire String
@@ -42,7 +42,7 @@ caseIndependent = map (map toLower)
 joiner :: [Int] -> Int
 joiner = read . concatMap show
 
--- Numeric fields as numerics (deals with up to 20 digits) 
+-- 4. Numeric fields as numerics (deals with up to 20 digits) 
 sampleFifthRule = ["foo100bar99baz0.txt", "foo100bar10baz0.txt", "foo1000bar99baz10.txt", "foo1000bar99baz9.txt"]
 -- expected   ['foo100bar10baz0.txt',  'foo100bar99baz0.txt', 'foo1000bar99baz9.txt', 'foo1000bar99baz10.txt']
 
@@ -57,3 +57,14 @@ makeListOfDigitsAsString :: [String] -> [String]
 makeListOfDigitsAsString l = tail $ nub l
 convertDigitAsStringToInt :: [String] -> [Int]
 convertDigitAsStringToInt = map (joiner . map  digitToInt)
+
+-- 5. Title sort
+sampleSixThyRule = ["The Wind in the Willows", "The 40th step more", "The 39 steps", "Wanda"]
+
+common = ["the","a","an","of"]
+
+-- let a = map words l
+-- let b = caseIndependent (head a)
+-- elem (head b) common
+
+-- stripPrefix (common !! 0) (map toLower "The Wind in the Willows")

@@ -60,11 +60,26 @@ convertDigitAsStringToInt = map (joiner . map  digitToInt)
 
 -- 5. Title sort
 sampleSixThyRule = ["The Wind in the Willows", "The 40th step more", "The 39 steps", "Wanda"]
+-- expected ['The 39 steps', 'The 40th step more', 'Wanda', 'The Wind in the Willows']
 
-common = ["the","a","an","of"]
+removeLeadCommonWords l = map removeLeadCommonWord $ breakList l
 
--- let a = map words l
--- let b = caseIndependent (head a)
--- elem (head b) common
+--breakList :: [[Char]] -> [[[Char]]]
+breakList = map words
+--removeLeadCommonWord :: [[String]] -> [String] -> String
+removeLeadCommonWord a = unwords $ if f a commonWords then tail a else a 
+                        where f l1 = elem (map toLower (head l1))
+                              commonWords = ["the","a","an","of"]
 
--- stripPrefix (common !! 0) (map toLower "The Wind in the Willows")
+
+
+{-- codigo phyton
+ # Title
+    words = s.split()
+    if len(words) > 1 and words[0] in commonleaders:
+        s = ' '.join( words[1:])
+    # accent and ligatures
+    s = ''.join(splitchar(c) for c in s)
+    # Replacements (single char replaced by one or more)
+    s = ''.join( replacements.get(ch, ch) for ch in s )
+--}

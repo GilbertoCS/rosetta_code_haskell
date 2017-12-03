@@ -71,7 +71,18 @@ removeLeadCommonWord a = unwords $ if f a commonWords then tail a else a
                         where f l1 = elem (map toLower (head l1))
                               commonWords = ["the","a","an","of"]
 
+-- 6. Equivalent accented characters (and case)
+sample6Rule = ["Equiv. ý accents: 2-2", "Equiv. Ý accents: 2-1", "Equiv. y accents: 2+0", "Equiv. Y accents: 2+1"]
+-- the normal sort function already has this feature
 
+sample7Rule = ["Ĳ ligatured ij","no ligature"]
+-- expected ["Ĳ ligatured ij","no ligature"]
+
+sample8Rule = ["Start with an ʒ: 2-2", "Start with an ſ: 2-1", "Start with an ß: 2+0", "Start with an s: 2+1"]
+-- expected 'Start with an s: 2+1' 'Start with an ſ: 2-1' 'Start with an ʒ: 2-2' 'Start with an ß: 2+0'
+
+replacements = [("ß", "ss"), ("ſ", "s"), ("ʒ", "s")]
+--map fst replacements retorna todas as chaves
 
 {-- codigo phyton
  # Title

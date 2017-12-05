@@ -3,9 +3,26 @@
 import Data.List
 import Data.Char
 import Data.String.Utils
+import Data.List.Utils
 import Data.Function (on)
 
--- TODO gerar output com o valor original organizadoe nao somente o novo valor organizado
+-- TODO gerar output com o valor original organizado e nao somente o novo valor organizado
+
+print1Rule = do
+                putStrLn "# Ignoring leading spaces \n"
+                putStrLn "Text strings:"              
+                mapM_ print sample1Rule
+                putStrLn "Normally sorted:" 
+                mapM_ print (sort sample1Rule)
+                putStrLn "Naturally sorted:"
+                mapM_ print (sortListWith sample1Rule ignoringStartEndSpaces) --TODO devolver ao conteudo da lista original
+                putStrLn "\n # Ignoring multiple adjacent spaces (m.a.s) \n"
+                putStrLn "Text strings:"
+                mapM_ print sample2Rule
+                putStrLn "Normally sorted:" 
+                mapM_ print (sort sample2Rule)
+                putStrLn "Naturally sorted:"
+                mapM_ print (sortListWith sample2Rule ignoringMultipleAdjacentSpaces) --TODO devolver ao conteudo da lista original
 
 -- function to execute all sorts
 sortListWith l f = sort $ f l
@@ -13,7 +30,7 @@ sortListWith l f = sort $ f l
 -- 1. Ignore leading, trailing and multiple adjacent spaces
 
  -- Ignoring leading spaces
-sampleFirstRule = ["ignore leading spaces: 2-2", " ignore leading spaces: 2-1", "  ignore leading spaces: 2+0",  "   ignore leading spaces: 2+1"]
+sample1Rule = ["ignore leading spaces: 2-2", " ignore leading spaces: 2-1", "  ignore leading spaces: 2+0",  "   ignore leading spaces: 2+1"]
 
 -- receive a String and remove all spaces from the start and end of that String, a String is considered an List os Char
 -- ex: "  a string " = "a string"
@@ -21,7 +38,7 @@ ignoringStartEndSpaces :: [String] -> [String]
 ignoringStartEndSpaces = map strip
 
 -- Ignoring multiple adjacent spaces and Equivalent whitespace characters
-sampleSecondRule = ["ignore m.a.s spaces: 2-2", "ignore m.a.s  spaces: 2-1", "ignore m.a.s   spaces: 2+0", "ignore m.a.s    spaces: 2+1"]
+sample2Rule = ["ignore m.a.s spaces: 2-2", "ignore m.a.s  spaces: 2-1", "ignore m.a.s   spaces: 2+0", "ignore m.a.s    spaces: 2+1"]
 
 ignoringMultipleAdjacentSpaces :: [String] -> [String]
 ignoringMultipleAdjacentSpaces = map (unwords . words)
@@ -62,10 +79,10 @@ convertDigitAsStringToInt = map (joiner . map  digitToInt)
 sampleSixThyRule = ["The Wind in the Willows", "The 40th step more", "The 39 steps", "Wanda"]
 -- expected ['The 39 steps', 'The 40th step more', 'Wanda', 'The Wind in the Willows']
 
-removeLeadCommonWords l = map removeLeadCommonWord $ breakList l
+removeLeadCommonWords l = map removeLeadCommonWord $ splitList l
 
 --breakList :: [[Char]] -> [[[Char]]]
-breakList = map words
+splitList = map words
 --removeLeadCommonWord :: [[String]] -> [String] -> String
 removeLeadCommonWord a = unwords $ if f a commonWords then tail a else a 
                         where f l1 = elem (map toLower (head l1))
@@ -83,14 +100,3 @@ sample8Rule = ["Start with an ʒ: 2-2", "Start with an ſ: 2-1", "Start with an 
 
 replacements = [("ß", "ss"), ("ſ", "s"), ("ʒ", "s")]
 --map fst replacements retorna todas as chaves
-
-{-- codigo phyton
- # Title
-    words = s.split()
-    if len(words) > 1 and words[0] in commonleaders:
-        s = ' '.join( words[1:])
-    # accent and ligatures
-    s = ''.join(splitchar(c) for c in s)
-    # Replacements (single char replaced by one or more)
-    s = ''.join( replacements.get(ch, ch) for ch in s )
---}

@@ -10,18 +10,24 @@ import Data.Function (on)
 
 print1Rule = do
                 putStrLn "# Ignoring leading spaces \n"
-                printBlockOfMessages sample1Rule ignoringStartEndSpaces --TODO devolver ao conteudo da lista original
+                printMessage "teste" sample1Rule
+
+                                MAPM_ print sample1Rule
+                putStrLn "Normally sorted:"
+                mapM_ print (sort sample1Rule)
+                putStrLn "Naturally sorted:"
+                mapM_ print (sortListWith sample1Rule ignoringStartEndSpaces) --TODO devolver ao conteudo da lista original
                 putStrLn "\n # Ignoring multiple adjacent spaces (m.a.s) \n"
-                printBlockOfMessages sample2Rule ignoringMultipleAdjacentSpaces
+                putStrLn "Text strings:"
+                mapM_ print sample2Rule
+                putStrLn "Normally sorted:"
+                mapM_ print (sort sample2Rule)
+                putStrLn "Naturally sorted:"
+                mapM_ print (sortListWith sample2Rule ignoringMultipleAdjacentSpaces) --TODO devolver ao conteudo da lista original
 
 printMessage message content = do
                  putStrLn message
                  mapM_ print content
-
-printBlockOfMessages list function = do
-      printMessage "Text strings:" list
-      printMessage "Normally sorted:" (sort list)
-      printMessage "Naturally sorted:" (sortListWith list function)
 
 -- function to execute all sorts
 sortListWith l f = sort $ f l

@@ -13,6 +13,14 @@ print1Rule = do
                 printBlockOfMessages sample1Rule ignoringStartEndSpaces --TODO devolver ao conteudo da lista original
                 putStrLn "\n # Ignoring multiple adjacent spaces (m.a.s) \n"
                 printBlockOfMessages sample2Rule ignoringMultipleAdjacentSpaces
+                putStrLn "\n # Equivalent whitespace characters \n"
+                printBlockOfMessages sample3Rule ignoringMultipleAdjacentSpaces
+                putStrLn "\n # Case Indepenent sorts \n"
+                printBlockOfMessages sample4Rule caseIndependent
+                putStrLn "\n # Numeric fields as numerics \n"
+                printBlockOfMessages sample5Rule numericFieldsAsNumbers
+                putStrLn "\n # Title sorts \n"
+                printBlockOfMessages sample6Rule removeLeadCommonWords
 
 printMessage message content = do
                  putStrLn message
@@ -43,24 +51,19 @@ ignoringMultipleAdjacentSpaces :: [String] -> [String]
 ignoringMultipleAdjacentSpaces = map (unwords . words)
 
 -- 2. Equivalent whitespace characters
-sampleThirdRule = ["Equiv. spaces: 3-3", "Equiv.\rspaces: 3-2", "Equiv.\x0cspaces: 3-1", "Equiv.\x0bspaces: 3+0", "Equiv.\nspaces: 3+1", "Equiv.\tspaces: 3+2"]
+sample3Rule = ["Equiv. spaces: 3-3", "Equiv.\rspaces: 3-2", "Equiv.\x0cspaces: 3-1", "Equiv.\x0bspaces: 3+0", "Equiv.\nspaces: 3+1", "Equiv.\tspaces: 3+2"]
 
 -- 3. Case independent sort
-sampleFourthRule = ["cASE INDEPENENT: 3-2", "caSE INDEPENENT: 3-1", "casE INDEPENENT: 3+0", "case INDEPENENT: 3+1"]
+sample4Rule = ["cASE INDEPENENT: 3-2", "caSE INDEPENENT: 3-1", "casE INDEPENENT: 3+0", "case INDEPENENT: 3+1"]
 
 -- lower case of an entire String
 -- ex "SomeCAse" = "somecase"
 caseIndependent :: [String] -> [String]
 caseIndependent = map (map toLower)
 
--- join a list of numbers into a single number
--- ex [4,2] = 42
-joiner :: [Int] -> Int
-joiner = read . concatMap show
-
 -- 4. Numeric fields as numerics (deals with up to 20 digits) 
-sampleFifthRule = ["foo100bar99baz0.txt", "foo100bar10baz0.txt", "foo1000bar99baz10.txt", "foo1000bar99baz9.txt"]
--- expected   ['foo100bar10baz0.txt',  'foo100bar99baz0.txt', 'foo1000bar99baz9.txt', 'foo1000bar99baz10.txt']
+sample5Rule = ["foo100bar99baz0.txt", "foo100bar10baz0.txt", "foo1000bar99baz10.txt", "foo1000bar99baz9.txt"]
+sample5Rule' = ["foo3bar99baz2.txt", "foo2bar99baz3.txt", "foo1bar99baz4.txt", "foo4bar99baz1.txt"]
 
 numericFieldsAsNumbers :: [String] -> [[Int]]
 numericFieldsAsNumbers = map findOnlyNumerics
@@ -74,27 +77,29 @@ makeListOfDigitsAsString l = tail $ nub l
 convertDigitAsStringToInt :: [String] -> [Int]
 convertDigitAsStringToInt = map (joiner . map  digitToInt)
 
+-- join a list of numbers into a single number
+-- ex [4,2] = 42
+joiner :: [Int] -> Int
+joiner = read . concatMap show
+
 -- 5. Title sort
-sampleSixThyRule = ["The Wind in the Willows", "The 40th step more", "The 39 steps", "Wanda"]
--- expected ['The 39 steps', 'The 40th step more', 'Wanda', 'The Wind in the Willows']
+sample6Rule = ["The Wind in the Willows", "The 40th step more", "The 39 steps", "Wanda"]
 
 removeLeadCommonWords l = map removeLeadCommonWord $ splitList l
 
---breakList :: [[Char]] -> [[[Char]]]
 splitList = map words
---removeLeadCommonWord :: [[String]] -> [String] -> String
 removeLeadCommonWord a = unwords $ if f a commonWords then tail a else a 
                         where f l1 = elem (map toLower (head l1))
                               commonWords = ["the","a","an","of"]
 
 -- 6. Equivalent accented characters (and case)
-sample6Rule = ["Equiv. ý accents: 2-2", "Equiv. Ý accents: 2-1", "Equiv. y accents: 2+0", "Equiv. Y accents: 2+1"]
+sample7Rule = ["Equiv. ý accents: 2-2", "Equiv. Ý accents: 2-1", "Equiv. y accents: 2+0", "Equiv. Y accents: 2+1"]
 -- the normal sort function already has this feature
 
-sample7Rule = ["Ĳ ligatured ij","no ligature"]
+sample8Rule = ["Ĳ ligatured ij","no ligature"]
 -- expected ["Ĳ ligatured ij","no ligature"]
 
-sample8Rule = ["Start with an ʒ: 2-2", "Start with an ſ: 2-1", "Start with an ß: 2+0", "Start with an s: 2+1"]
+sample9Rule = ["Start with an ʒ: 2-2", "Start with an ſ: 2-1", "Start with an ß: 2+0", "Start with an s: 2+1"]
 -- expected 'Start with an s: 2+1' 'Start with an ſ: 2-1' 'Start with an ʒ: 2-2' 'Start with an ß: 2+0'
 
 replacements = [("ß", "ss"), ("ſ", "s"), ("ʒ", "s")]
